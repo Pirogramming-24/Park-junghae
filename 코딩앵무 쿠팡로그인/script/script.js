@@ -1,10 +1,10 @@
 window.onload=function(){
 
-    const pw_show_hide = this.document.querySelector(',pw_show_hide')
-    const input_id = this.document.querySelector('input[type=text]')
-    const input_pw = this.document.querySelector('input[type=password]')
-    const id_error = this.document.querySelector('.id_error')
-    const pw_error = this.document.querySelector('.pw_error')
+    const pw_show_hide = document.querySelector('.pw_show_hide')
+    const input_id = document.querySelector('input[type=text]')
+    const input_pw = document.querySelector('input[type=password]')
+    const id_error = document.querySelector('.id_error')
+    const pw_error = document.querySelector('.pw_error')
     console.log(pw_show_hide, input_id, input_pw, id_error, pw_error)
 
     input_id.addEventListener('click', function(){
