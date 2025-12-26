@@ -6,6 +6,11 @@ let gameOver = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   initGame();
+
+  // 엔터 입력 시 확인 실행
+  document.addEventListener("keydown", e => {
+    if (e.key === "Enter") check_numbers();
+  });
 });
 
 // 초기화
@@ -39,9 +44,9 @@ function generateRandomNumbers(count) {
 function check_numbers() {
   if (gameOver) return;
 
-  const n1 = document.getElementById("number1").value;
-  const n2 = document.getElementById("number2").value;
-  const n3 = document.getElementById("number3").value;
+  const n1 = number1.value;
+  const n2 = number2.value;
+  const n3 = number3.value;
 
   if (n1 === "" || n2 === "" || n3 === "") {
     clearInputs();
@@ -58,15 +63,8 @@ function check_numbers() {
     else if (answer.includes(guess[i])) balls++;
   }
 
-  let resultText = "";
-  let isOut = false;
-
-  if (strikes === 0 && balls === 0) {
-    resultText = "O";
-    isOut = true;
-  } else {
-    resultText = `${strikes} S ${balls} B`;
-  }
+  let isOut = strikes === 0 && balls === 0;
+  let resultText = isOut ? "O" : `${strikes} S ${balls} B`;
 
   printResultLine(guess, resultText, isOut);
 
@@ -114,7 +112,6 @@ function printResultLine(guessArray, resultText, isOut) {
 
   line.appendChild(leftSpan);
   line.appendChild(rightSpan);
-
   resultsDiv.appendChild(line);
 }
 
@@ -131,9 +128,17 @@ function checkGameEnd(strikes) {
   if (strikes === 3) {
     resultImg.src = "success.png";
     gameOver = true;
-  } else if (attemptsLeft === 0) {
+  } 
+  else if (attemptsLeft === 0) {
     resultImg.src = "fail.png";
     gameOver = true;
+
+    // 실패 시 정답 공개
+    const answerLine = document.createElement("div");
+    answerLine.style.textAlign = "center";
+    answerLine.style.marginTop = "10px";
+    answerLine.innerHTML = `정답 : <strong>${answer.join(" ")}</strong>`;
+    document.getElementById("results").appendChild(answerLine);
   }
 
   if (gameOver) {
@@ -144,12 +149,8 @@ function checkGameEnd(strikes) {
 
 // input 초기화
 function clearInputs() {
-  const n1 = document.getElementById("number1");
-  const n2 = document.getElementById("number2");
-  const n3 = document.getElementById("number3");
-
-  n1.value = "";
-  n2.value = "";
-  n3.value = "";
-  n1.focus();
+  number1.value = "";
+  number2.value = "";
+  number3.value = "";
+  number1.focus();
 }
