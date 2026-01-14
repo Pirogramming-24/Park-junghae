@@ -1,7 +1,0 @@
-# Python
-__pycache__/
-*.pyc
-venv/
-
-# MediaPipe model
-hand_landmarker.task
