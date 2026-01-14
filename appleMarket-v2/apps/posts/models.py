@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from apps.users.models import User
 
 # Create your models here.
@@ -13,7 +12,12 @@ class Post(models.Model):
     updated_at = models.DateTimeField('수정일', null=True, blank=True)
     photo = models.ImageField('이미지', blank=True, upload_to='posts/%Y%m%d')
 
-    def save(self, *args, **kwargs):
-        if self.pk:  # 수정일 때에만 갱신
-            self.updated_at = timezone.now()
-        super().save(*args, **kwargs)
+    kcal = models.IntegerField('칼로리(kcal)', null=True, blank=True)
+    carbs = models.FloatField('탄수화물(g)', null=True, blank=True)
+    protein = models.FloatField('단백질(g)', null=True, blank=True)
+    fat = models.FloatField('지방(g)', null=True, blank=True)
+
+    ocr_done = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.title
