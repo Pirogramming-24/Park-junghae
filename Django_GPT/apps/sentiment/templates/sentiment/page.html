@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>감정분석</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <textarea name="text" rows="6" style="width:100%;" placeholder="문장을 입력하세요.">{{ input_text }}</textarea>
+  <div style="margin-top:8px;">
+    <button type="submit">실행</button>
+  </div>
+</form>
+
+{% if output %}
+  <hr />
+  <h3>결과</h3>
+  <div style="white-space:pre-wrap;border:1px solid #ddd;padding:12px;">{{ output }}</div>
+{% endif %}
+
+{% if user.is_authenticated and histories %}
+  <hr>
+  <h3>내 이전 요약 기록</h3>
+
+  <ul>
+    {% for h in histories %}
+      <li style="margin-bottom:12px;">
+        <strong>입력:</strong><br>
+        <pre>{{ h.input_text }}</pre>
+        <strong>결과:</strong><br>
+        <pre>{{ h.output_text }}</pre>
+        <small>{{ h.created_at }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% endblock %}

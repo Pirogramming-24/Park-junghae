@@ -1,0 +1,50 @@
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# ===============================
+# Virtual Environment
+# ===============================
+venv/
+.env
+.env.*
+
+# ===============================
+# Django
+# ===============================
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Django migrations cache
+*/migrations/__pycache__/
+
+# ===============================
+# IDE / Editor
+# ===============================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ===============================
+# OS
+# ===============================
+Thumbs.db
+
+# ===============================
+# Hugging Face / Secrets
+# ===============================
+config/local_settings.py
+settings_local.py
+
+# 혹시 실수로 키 파일 만들었을 경우
+hf_token.txt
+secret_key.txt
