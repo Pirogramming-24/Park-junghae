@@ -1,9 +1,6 @@
 from django.shortcuts import render
-from config.hf_client import call_hf_text_model
-from apps.accounts.models import ChatHistory
-
-MODEL_NAME = "facebook/bart-large-cnn"
-
+from config.ai_services import run_summarize
+from apps.accounts.models import ChatHistory  # 이미 쓰고 있으면 유지
 
 def summarize_page(request):
     input_text = ""
@@ -11,16 +8,7 @@ def summarize_page(request):
 
     if request.method == "POST":
         input_text = request.POST.get("text", "")
-
-        result = call_hf_text_model(
-            MODEL_NAME,
-            {"inputs": input_text}
-        )
-
-        if isinstance(result, dict) and result.get("error"):
-            output = f"모델 오류: {result['message']}"
-        else:
-            output = result[0]["summary_text"]
+        output = run_summarize(input_text)
 
         if request.user.is_authenticated:
             ChatHistory.objects.create(
@@ -33,8 +21,7 @@ def summarize_page(request):
     histories = []
     if request.user.is_authenticated:
         histories = ChatHistory.objects.filter(
-            user=request.user,
-            model_name="summarize"
+            user=request.user, model_name="summarize"
         ).order_by("-created_at")
 
     return render(request, "summarize/page.html", {

@@ -1,10 +1,7 @@
 from django.shortcuts import render
 from config.decorators import login_required_with_alert
-from config.hf_client import call_hf_text_model
+from config.ai_services import run_generate
 from apps.accounts.models import ChatHistory
-
-MODEL_NAME = "bigscience/bloom-560m"
-
 
 @login_required_with_alert
 def generate_page(request):
@@ -13,22 +10,7 @@ def generate_page(request):
 
     if request.method == "POST":
         prompt = request.POST.get("prompt", "")
-
-        result = call_hf_text_model(
-            MODEL_NAME,
-            {
-                "inputs": prompt,
-                "parameters": {
-                    "max_new_tokens": 120,
-                    "temperature": 0.7,
-                }
-            }
-        )
-
-        if isinstance(result, dict) and result.get("error"):
-            output = f"모델 오류: {result['message']}"
-        else:
-            output = result[0]["generated_text"]
+        output = run_generate(prompt)
 
         ChatHistory.objects.create(
             user=request.user,
@@ -38,8 +20,7 @@ def generate_page(request):
         )
 
     histories = ChatHistory.objects.filter(
-        user=request.user,
-        model_name="generate"
+        user=request.user, model_name="generate"
     ).order_by("-created_at")
 
     return render(request, "generate/page.html", {
